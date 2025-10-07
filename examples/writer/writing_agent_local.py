@@ -380,15 +380,15 @@ async def main():
     
     # 创建写作智能体
     # letta cloud
-    writer = WritingAgent(token="sk-let-ZjEwZDkzMmQtYzk3NC00YzFjLWFlZGItNWZkNDA1ZmQ1NTBkOmMxMGNkZGQ2LTllMTgtNGZmNC1hODk0LWMxNDA4MGYyMWE2NA==")
+    #writer = WritingAgent(token="sk-let-ZjEwZDkzMmQtYzk3NC00YzFjLWFlZGItNWZkNDA1ZmQ1NTBkOmMxMGNkZGQ2LTllMTgtNGZmNC1hODk0LWMxNDA4MGYyMWE2NA==")
     
     # self-hosted 
-    # writer = WritingAgent(base_url = "http://localhost:8283")
+    writer = WritingAgent(base_url = "http://localhost:8283")
 
     try:
         # 创建智能体
         agent_id = await writer.create_writing_agent(
-            name="writer_agent_v3",
+            name="writer_agent_v5",
             style="专业、清晰、有逻辑性，适合学术和商业写作"
         )
         
@@ -404,15 +404,15 @@ async def main():
         print("\n" + "="*50)
         outline = await writer.generate_outline(
             topic="人工智能技术的最新发展趋势及其对商业的影响",
-            structure_type="business"
+            structure_type="standard"
         )
         
         # 研究主题
-        print("\n" + "="*50)
-        research = await writer.research_topic(
-            topic="人工智能在商业中的应用",
-            depth="medium"
-        )
+        # print("\n" + "="*50)
+        # research = await writer.research_topic(
+        #     topic="人工智能在商业中的应用",
+        #     depth="shallow"
+        # )
         
         # 扩展内容
         print("\n" + "="*50)
