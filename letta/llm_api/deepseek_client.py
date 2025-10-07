@@ -12,6 +12,7 @@ from letta.llm_api.openai_client import OpenAIClient
 from letta.otel.tracing import trace_method
 from letta.schemas.llm_config import LLMConfig
 from letta.schemas.message import Message as PydanticMessage
+from letta.schemas.message import Message as _Message   # 补这一行
 from letta.schemas.openai.chat_completion_request import (
     AssistantMessage,
     ChatCompletionRequest,

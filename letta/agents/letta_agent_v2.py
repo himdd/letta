@@ -84,7 +84,7 @@ class LettaAgentV2(BaseAgentV2):
             actor=actor,
         )
         self._initialize_state()
-
+        self.summarization_agent = None          # 补上缺失属性
         # Manager classes
         self.agent_manager = AgentManager()
         self.archive_manager = ArchiveManager()
