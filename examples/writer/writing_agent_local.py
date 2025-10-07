@@ -61,6 +61,7 @@ class WritingAgent:
         memory_blocks = [
             CreateBlock(
                 label="persona",
+                description="本块存储有关当前agent角色的详细信息,指导agent的行为和响应方式。助于和用户在互动中保持一致性.",
                 value=f"""你是一个专业的写作助手，具有以下特点：
 1. 写作风格：{self.writing_style}
 2. 擅长各种文体：新闻新作、商业报告、创意写作、技术文档等
@@ -70,6 +71,7 @@ class WritingAgent:
             ),
             CreateBlock(
                 label="writing_skills",
+                description="本块存储写作写作技巧相关知识 ，帮助智能体提升写作质量。",
                 value="""核心写作技能：
 - 结构化写作：能够组织清晰的文章结构
 - 语言表达：使用准确、生动的语言
@@ -79,6 +81,7 @@ class WritingAgent:
             ),
             CreateBlock(
                 label="current_project",
+                description="本块存储当前的写作项目详情，帮助智能体跟踪进度和要求。",
                 value="写作项目"
             )
         ]
@@ -150,7 +153,7 @@ class WritingAgent:
 请提供：
 1. 文章标题建议
 2. 大纲结构(简短说明)
-3. 逻辑流程说明
+3. 不超过300字
 请确保大纲逻辑清晰，结构合理。
 """
         
@@ -209,132 +212,6 @@ class WritingAgent:
         print(content)
         return content
     
-    async def polish_content(self, content: str, focus_areas: List[str] = None) -> str:
-        """
-        润色内容
-        
-        Args:
-            content: 需要润色的内容
-            focus_areas: 重点润色方面（如：语言流畅度、逻辑性、专业性等）
-            
-        Returns:
-            润色后的内容
-        """
-        if not self.agent:
-            raise ValueError("请先创建写作智能体")
-            
-        focus_text = ""
-        if focus_areas:
-            focus_text = f"\n重点润色方面：{', '.join(focus_areas)}"
-            
-        prompt = f"""
-请对以下内容进行润色改进：
-
-{content}
-
-润色要求：
-1. 改进语言表达，使其更加生动有力
-2. 优化句子结构，提高可读性
-3. 增强逻辑性和连贯性
-4. 确保用词准确，避免重复
-5. 保持原文的核心观点和结构{focus_text}
-
-请直接输出润色后的内容，并简要说明主要改进点。
-"""
-        
-        response = self.client.agents.messages.create(
-            agent_id=self.agent.id,
-            messages=[MessageCreate(role="user", content=prompt)]
-        )
-        
-        polished = response.messages[-1].content
-        print("✨ 润色后的内容：")
-        print(polished)
-        return polished
-    
-    async def adjust_style(self, content: str, target_style: str) -> str:
-        """
-        调整写作风格
-        
-        Args:
-            content: 需要调整的内容
-            target_style: 目标风格（如：正式、轻松、学术、商业等）
-            
-        Returns:
-            调整后的内容
-        """
-        if not self.agent:
-            raise ValueError("请先创建写作智能体")
-            
-        prompt = f"""
-请将以下内容调整为 {target_style} 的写作风格：
-
-{content}
-
-风格调整要求：
-1. 语言风格：{target_style}
-2. 保持原文的核心信息和逻辑结构
-3. 调整语调和表达方式以符合目标风格
-4. 确保风格转换自然，不显突兀
-5. 保持内容的专业性和准确性
-
-请直接输出调整后的内容。
-"""
-        
-        response = self.client.agents.messages.create(
-            agent_id=self.agent.id,
-            messages=[MessageCreate(role="user", content=prompt)]
-        )
-        
-        adjusted = response.messages[-1].content
-        print(f"🎨 风格调整后的内容（{target_style}）：")
-        print(adjusted)
-        return adjusted
-    
-    async def research_topic(self, topic: str, depth: str = "medium") -> str:
-        """
-        研究主题并收集信息
-        
-        Args:
-            topic: 研究主题
-            depth: 研究深度（shallow, medium, deep）
-            
-        Returns:
-            研究结果
-        """
-        if not self.agent:
-            raise ValueError("请先创建写作智能体")
-            
-        depth_instructions = {
-            "shallow": "提供基础信息和概述",
-            "medium": "提供详细信息和多个角度",
-            "deep": "提供深入分析和专业见解"
-        }
-        
-        prompt = f"""
-请对以下主题进行 {depth_instructions[depth]} 的研究：
-
-主题：{topic}
-
-请提供：
-1. 主题的核心概念和定义
-2. 相关的重要事实和数据
-3. 不同观点和争议点
-4. 实际应用和案例
-5. 进一步研究的建议
-
-研究要求：{depth_instructions[depth]}，确保信息的准确性和相关性。
-"""
-        
-        response = self.client.agents.messages.create(
-            agent_id=self.agent.id,
-            messages=[MessageCreate(role="user", content=prompt)]
-        )
-        
-        research = response.messages[-1].content
-        print(f"🔍 研究结果（{topic}）：")
-        print(research)
-        return research
     
     async def _update_memory_block(self, block_label: str, new_value: str) -> None:
         """更新记忆块"""
@@ -385,7 +262,7 @@ async def main():
     try:
         # 创建智能体
         agent_id = await writer.create_writing_agent(
-            name="writer_agent_v6",
+            name="writer_agent_v7",
             style="专业、清晰、有逻辑性，适合新闻写作"
         )
         
@@ -404,12 +281,6 @@ async def main():
             structure_type="standard"
         )
         
-        # 研究主题
-        # print("\n" + "="*50)
-        # research = await writer.research_topic(
-        #     topic="人工智能在商业中的应用",
-        #     depth="shallow"
-        # )
         
         # 扩展内容
         print("\n" + "="*50)
@@ -423,25 +294,11 @@ async def main():
             word_count=300
         )
         
-        # # 润色内容
-        # print("\n" + "="*50)
-        # polished = await writer.polish_content(
-        #     content=content,
-        #     focus_areas=["语言流畅度", "逻辑性", "专业性"]
-        # )
-        
-        # # 调整风格
-        # print("\n" + "="*50)
-        # adjusted = await writer.adjust_style(
-        #     content=polished,
-        #     target_style="轻松易懂"
-        # )
-        
-        # # 显示进度
-        # print("\n" + "="*50)
-        # progress = await writer.get_writing_progress()
-        # print("📊 写作进度：")
-        # print(json.dumps(progress, indent=2, ensure_ascii=False))
+        # 显示进度
+        print("\n" + "="*50)
+        progress = await writer.get_writing_progress()
+        print("📊 写作进度：")
+        print(json.dumps(progress, indent=2, ensure_ascii=False))
         
     except Exception as e:
         print(f"❌ 错误: {e}")
