@@ -35,7 +35,7 @@ class WritingAgent:
             self.model="openai/gpt-4o-mini"
             self.embedding="openai/text-embedding-3-small"
         else:
-            self.client = Letta(base_url=base_url)
+            self.client = Letta(base_url=base_url,timeout=120)
             self.model="deepseek/deepseek-chat"
             self.embedding="ollama/nomic-embed-text:latest"
         
@@ -63,10 +63,10 @@ class WritingAgent:
                 label="persona",
                 value=f"""你是一个专业的写作助手，具有以下特点：
 1. 写作风格：{self.writing_style}
-2. 擅长各种文体：学术论文、商业报告、创意写作、技术文档等
+2. 擅长各种文体：新闻新作、商业报告、创意写作、技术文档等
 3. 注重逻辑性、清晰度和可读性
 4. 能够根据读者群体调整写作风格
-5. 具备研究和分析能力，能够提供有深度的内容"""
+5. 具备获得最新热点能力"""
             ),
             CreateBlock(
                 label="writing_skills",
@@ -149,11 +149,8 @@ class WritingAgent:
 
 请提供：
 1. 文章标题建议
-2. 主要章节结构
-3. 每个章节的关键要点
-4. 逻辑流程说明
-5. 建议的写作顺序
-
+2. 大纲结构(简短说明)
+3. 逻辑流程说明
 请确保大纲逻辑清晰，结构合理。
 """
         
@@ -388,22 +385,22 @@ async def main():
     try:
         # 创建智能体
         agent_id = await writer.create_writing_agent(
-            name="writer_agent_v5",
-            style="专业、清晰、有逻辑性，适合学术和商业写作"
+            name="writer_agent_v6",
+            style="专业、清晰、有逻辑性，适合新闻写作"
         )
         
         # 开始写作项目
         await writer.start_writing_project(
-            project_name="AI 技术发展报告",
-            project_type="技术报告",
-            target_audience="技术管理者和决策者",
-            requirements="需要包含最新趋势和实际应用案例"
+            project_name="台风问题",
+            project_type="新闻稿",
+            target_audience="大众",
+            requirements="需要包含最新趋,其对大家生活的影响"
         )
         
         # 生成大纲
         print("\n" + "="*50)
         outline = await writer.generate_outline(
-            topic="人工智能技术的最新发展趋势及其对商业的影响",
+            topic="台风的最新发展趋势",
             structure_type="standard"
         )
         
@@ -417,35 +414,34 @@ async def main():
         # 扩展内容
         print("\n" + "="*50)
         content = await writer.expand_content(
-            section="AI 技术概述",
+            section="台风问题概述",
             key_points=[
-                "机器学习的发展历程",
-                "深度学习的关键突破",
-                "大语言模型的应用",
-                "AI 技术的商业化进程"
+                "新闻的发展历程",
+                "对大家的影响",
+                "如何应对"
             ],
             word_count=300
         )
         
-        # 润色内容
-        print("\n" + "="*50)
-        polished = await writer.polish_content(
-            content=content,
-            focus_areas=["语言流畅度", "逻辑性", "专业性"]
-        )
+        # # 润色内容
+        # print("\n" + "="*50)
+        # polished = await writer.polish_content(
+        #     content=content,
+        #     focus_areas=["语言流畅度", "逻辑性", "专业性"]
+        # )
         
-        # 调整风格
-        print("\n" + "="*50)
-        adjusted = await writer.adjust_style(
-            content=polished,
-            target_style="轻松易懂"
-        )
+        # # 调整风格
+        # print("\n" + "="*50)
+        # adjusted = await writer.adjust_style(
+        #     content=polished,
+        #     target_style="轻松易懂"
+        # )
         
-        # 显示进度
-        print("\n" + "="*50)
-        progress = await writer.get_writing_progress()
-        print("📊 写作进度：")
-        print(json.dumps(progress, indent=2, ensure_ascii=False))
+        # # 显示进度
+        # print("\n" + "="*50)
+        # progress = await writer.get_writing_progress()
+        # print("📊 写作进度：")
+        # print(json.dumps(progress, indent=2, ensure_ascii=False))
         
     except Exception as e:
         print(f"❌ 错误: {e}")
