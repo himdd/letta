@@ -75,16 +75,7 @@ class WritingAgent:
             ),
             CreateBlock(
                 label="current_project",
-                value="暂无进行中的写作项目"
-            ),
-            CreateBlock(
-                label="writing_tools",
-                value="""可用工具：
-- 大纲生成：创建文章结构大纲
-- 内容扩展：将要点扩展为完整段落
-- 语言润色：改进语言表达和流畅度
-- 风格调整：根据需求调整写作风格
-- 校对检查：检查语法、拼写和逻辑"""
+                value="写作项目"
             )
         ]
         
@@ -94,7 +85,7 @@ class WritingAgent:
             memory_blocks=memory_blocks,
             model="openai/gpt-4o-mini",
             embedding="openai/text-embedding-3-small",
-            tools=["web_search", "run_code"]  # 基础工具
+            tools=["web_search"]  # 基础工具
         )
         
         print(f"✅ 写作智能体 '{name}' 创建成功！")
@@ -353,7 +344,8 @@ class WritingAgent:
             self.client.agents.blocks.modify(
                 agent_id=self.agent.id,
                 block_label=block_label,
-                value=new_value
+                value=new_value,
+                read_only=False
             )
         except Exception as e:
             print(f"更新记忆块失败: {e}")
@@ -388,7 +380,7 @@ async def main():
     try:
         # 创建智能体
         agent_id = await writer.create_writing_agent(
-            name="writer_agent",
+            name="writer_agent2",
             style="专业、清晰、有逻辑性，适合学术和商业写作"
         )
         
