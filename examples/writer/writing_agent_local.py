@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 """
-写作智能体示例 - 基于 Letta 的智能写作助手
-
-这个示例展示了如何使用 Letta 创建一个专业的写作智能体，
-具有写作风格记忆、写作工具和协作功能。
-
 使用方法:
 1. 确保 Letta 服务器正在运行: `letta server`
 2. 运行此脚本: `python writing_agent.py`
@@ -95,7 +90,7 @@ class WritingAgent:
             tools=["web_search"]  # 基础工具
         )
         
-        print(f"✅ 写作智能体 '{name}' 创建成功！")
+        print(f"写作智能体 '{name}' 创建成功！")
         print(f"智能体 ID: {self.agent.id}")
         return self.agent.id
     
@@ -126,7 +121,7 @@ class WritingAgent:
         await self._update_memory_block("current_project", project_info)
         self.current_project = project_name
         
-        print(f"📝 开始写作项目：{project_name}")
+        print(f"开始写作项目：{project_name}")
         print(f"项目类型：{project_type}")
         print(f"目标读者：{target_audience}")
     
@@ -163,7 +158,7 @@ class WritingAgent:
         )
         
         outline = response.messages[-1].content
-        print("📋 生成的文章大纲：")
+        print("生成的文章大纲：")
         print(outline)
         return outline
     
@@ -208,7 +203,7 @@ class WritingAgent:
         )
         
         content = response.messages[-1].content
-        print(f"📝 扩展内容（{section}）：")
+        print(f"扩展内容（{section}）：")
         print(content)
         return content
     
@@ -250,7 +245,7 @@ class WritingAgent:
 
 async def main():
     """主函数 - 演示写作智能体的使用"""
-    print("🚀 启动写作智能体演示...")
+    print("启动写作智能体演示...")
     
     # 创建写作智能体
     # letta cloud
@@ -297,13 +292,13 @@ async def main():
         # 显示进度
         print("\n" + "="*50)
         progress = await writer.get_writing_progress()
-        print("📊 写作进度：")
+        print("写作进度：")
         print(json.dumps(progress, indent=2, ensure_ascii=False))
         
     except Exception as e:
-        print(f"❌ 错误: {e}")
+        print(f"错误: {e}")
     
-    print("\n✅ 写作智能体演示完成！")
+    print("\n 写作智能体演示完成！")
 
 
 if __name__ == "__main__":
