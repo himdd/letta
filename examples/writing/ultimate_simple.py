@@ -17,7 +17,10 @@ def create_writer():
     
     # 方式1：使用 Letta Cloud（需要 API 密钥）
     # client = Letta(token="sk-let-ZjEwZDkzMmQtYzk3NC00YzFjLWFlZGItNWZkNDA1ZmQ1NTBkOmMxMGNkZGQ2LTllMTgtNGZmNC1hODk0LWMxNDA4MGYyMWE2NA==")
-    
+    # agent = client.agents.create(
+    #     name="writer", 
+    #     memory_blocks=[CreateBlock(label="persona", value="你是专业写作助手，使用 DeepSeek 模型")]
+    # )
     # 方式2：使用本地服务器（API 密钥在服务器启动时配置）
     client = Letta(base_url="http://localhost:8283")
     
