@@ -32,8 +32,12 @@ class WritingAgent:
         """
         if token:
             self.client = Letta(token=token)
+            self.model="openai/gpt-4o-mini"
+            self.embedding="openai/text-embedding-3-small"
         else:
             self.client = Letta(base_url=base_url)
+            self.model="deepseek/deepseek-chat"
+            self.embedding="ollama/nomic-embed-text:latest"
         
         self.agent = None
         self.writing_style = "专业、清晰、有逻辑性"
@@ -83,8 +87,8 @@ class WritingAgent:
         self.agent = self.client.agents.create(
             name=name,
             memory_blocks=memory_blocks,
-            model="openai/gpt-4o-mini",
-            embedding="openai/text-embedding-3-small",
+            model=self.model,
+            embedding=self.embedding,
             tools=["web_search"]  # 基础工具
         )
         
@@ -375,8 +379,12 @@ async def main():
     print("🚀 启动写作智能体演示...")
     
     # 创建写作智能体
-    writer = WritingAgent(token="sk-let-ZjEwZDkzMmQtYzk3NC00YzFjLWFlZGItNWZkNDA1ZmQ1NTBkOmMxMGNkZGQ2LTllMTgtNGZmNC1hODk0LWMxNDA4MGYyMWE2NA==")
+    # letta cloud
+    #writer = WritingAgent(token="sk-let-ZjEwZDkzMmQtYzk3NC00YzFjLWFlZGItNWZkNDA1ZmQ1NTBkOmMxMGNkZGQ2LTllMTgtNGZmNC1hODk0LWMxNDA4MGYyMWE2NA==")
     
+    # self-hosted 
+    writer = WritingAgent(base_url = "http://localhost:8283")
+
     try:
         # 创建智能体
         agent_id = await writer.create_writing_agent(
