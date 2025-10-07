@@ -380,7 +380,7 @@ async def main():
     try:
         # 创建智能体
         agent_id = await writer.create_writing_agent(
-            name="writer_agent2",
+            name="writer_agent_v3",
             style="专业、清晰、有逻辑性，适合学术和商业写作"
         )
         
