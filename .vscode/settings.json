@@ -1,0 +1,8 @@
+{
+    "python.testing.pytestEnabled": true,          // 用 pytest 就 true
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestArgs": [
+        "tests"
+    ],        // 只收集 tests/ 下的用例
+    "python.testing.autoTestDiscoverOnSaveEnabled": true
+}

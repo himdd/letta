@@ -1,0 +1,56 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Letta Server (FastAPI)",
+            "type": "python",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "letta.server.rest_api.app:app",
+                "--host", "localhost",
+                "--port", "8283",
+                "--reload",
+                "--log-level", "debug"
+            ],
+            "jinja": true,
+            "justMyCode": false,
+            "env": {
+                "LETTA_SERVER_PASSWORD": "letta",
+                "LOG_LEVEL": "DEBUG"
+            },
+            "cwd": "${workspaceFolder}",
+            "redirectOutput": true
+        },
+        {
+            "name": "Letta Server (Module)",
+            "type": "python",
+            "request": "launch",
+            "module": "letta.main",
+            "args": ["server", "--port", "8283", "--host", "localhost", "--debug"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "LETTA_SERVER_PASSWORD": "letta",
+                "LOG_LEVEL": "DEBUG"
+            },
+            "cwd": "${workspaceFolder}",
+            "redirectOutput": true
+        },
+        {
+            "name": "Letta Server (Direct Launch)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/letta/server/rest_api/app.py",
+            "args": ["--host", "localhost", "--port", "8283"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "LETTA_SERVER_PASSWORD": "letta",
+                "LOG_LEVEL": "DEBUG"
+            },
+            "cwd": "${workspaceFolder}",
+            "redirectOutput": true
+        }
+    ]
+}
